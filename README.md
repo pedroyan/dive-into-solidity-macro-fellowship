@@ -9,16 +9,16 @@ All the normal hardhat tooling is available in this repository, such as `npx har
 
 Please complete each of the following tasks by adding or editing code in the `KnowledgeTest.sol` contract after finishing section 1:
 
-- Add a public state variable of type address called `owner`
-- Declare the `constructor` and initialize the owner variable in the constructor. The `owner` should be initialized with the address of the account that deploys the contract
-- Modify the `changeTokens()` function in such a way that it changes the state variable called tokens.
-- Make it so that the contract can receive ETH by sending it directly to the contract address
-- Add a function called `getBalance()` that returns the contract's balance
-- Add a function called `transferAll()` that takes an argument of type `address` and transfers the entire balance of the contract to it
-- Add a restriction so that only the `owner` can call `transferAll()`, otherwise, make it revert with an `"ONLY_OWNER"` error (use a require statement)
-- Add a function called `start()` that adds the address of the account that calls it to the dynamic array called `players`
-- Declare a function called `concatenate` that takes two strings as parameters and returns them concatenated
-- Note: Since Solidity does not offer a native way to concatenate strings use abi.encodePacked() to do that
+- [x] Add a public state variable of type address called `owner`
+- [x] Declare the `constructor` and initialize the owner variable in the constructor. The `owner` should be initialized with the address of the account that deploys the contract
+- [x] Modify the `changeTokens()` function in such a way that it changes the state variable called tokens.
+- [x] Make it so that the contract can receive ETH by sending it directly to the contract address
+- [x] Add a function called `getBalance()` that returns the contract's balance
+- [X] Add a function called `transferAll()` that takes an argument of type `address` and transfers the entire balance of the contract to it
+- [x] Add a restriction so that only the `owner` can call `transferAll()`, otherwise, make it revert with an `"ONLY_OWNER"` error (use a require statement)
+- [x] Add a function called `start()` that adds the address of the account that calls it to the dynamic array called `players`
+- [x] Declare a function called `concatenate` that takes two strings as parameters and returns them concatenated
+  - Note: Since Solidity does not offer a native way to concatenate strings use abi.encodePacked() to do that
 
 Once you are done, run `npx hardhat test` to check your work :D
 

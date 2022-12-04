@@ -7,40 +7,56 @@ contract Lottery {
     // declaring the state variables
     address[] public players; //dynamic array of type address payable
     address[] public gameWinners;
-    address public owner;
+    address public immutable owner;
 
-    // declaring the constructor
+    modifier requiresOwner() {
+        require(msg.sender == owner, "ONLY_OWNER");
+        _;
+    }
+
+    /// @notice The constructor is called once when the contract is deployed. It sets the owner of the contract
     constructor() {
-        // TODO: initialize the owner to the address that deploys the contract
+        owner = msg.sender;
     }
 
-    // declaring the receive() function that is necessary to receive ETH
+    // @notice handles ETH sent to the contract and adds the sender to the lottery
     receive() external payable {
-        // TODO: require each player to send exactly 0.1 ETH
-        // TODO: append the new player to the players array
+        // Players must send exactly 0.1 ETH to enter the lottery
+        require(msg.value == 0.1 ether, "You must send exactly 0.1 ETH");
+
+        players.push(msg.sender);
     }
 
-    // returning the contract's balance in wei
-    function getBalance() public view returns (uint256) {
-        // TODO: restrict this function so only the owner is allowed to call it
-        // TODO: return the balance of this address
+    /// @notice returns the contract balance in wei. Only callable by the owner.
+    /// @dev Fun fact: this function is useless, since anyone can query the contract balance at any time using the
+    ///      `.balance` property :)
+    function getBalance() public requiresOwner view returns (uint256) {
+        return address(this).balance;
     }
 
-    // selecting the winner
-    function pickWinner() public {
-        // TODO: only the owner can pick a winner 
-        // TODO: owner can only pick a winner if there are at least 3 players in the lottery
+    /**
+    * @notice Picks the winner of the lottery and sends them the contract balance. This function uses the
+    * Checks-Effects-Interactions pattern to prevent reentrancy attacks, which in this case would be harmless, since
+    * we are already transferring the entire lottery balance to the winner
+    */
+    function pickWinner() public requiresOwner {
+        require(players.length >= 3, "NOT_ENOUGH_PLAYERS");
 
+        // Pick winner "randomly"
         uint256 r = random();
         address winner;
+        uint256 index = r % players.length;
+        winner = players[index];
 
-        // TODO: compute an unsafe random index of the array and assign it to the winner variable 
+        // Append the winner to the gameWinners array
+        gameWinners.push(winner);
 
-        // TODO: append the winner to the gameWinners array
+        // Reset the lottery for the next round
+        delete players;
 
-        // TODO: reset the lottery for the next round
-
-        // TODO: transfer the entire contract's balance to the winner
+        // Transfer the entire contract's balance to the winner
+        (bool success, ) = winner.call{value: address(this).balance}("");
+        require(success, "Failed to transfer balance to winner");
     }
 
     // helper function that returns a big random integer
