@@ -12,6 +12,11 @@ contract KnowledgeTest {
     /// once set.
     address public immutable owner;
 
+    modifier requiresOwner() {
+        require(msg.sender == owner, "ONLY_OWNER");
+        _;
+    }
+
     /// @notice The constructor is called once when the contract is deployed. It sets the owner of the contract
     constructor() {
         owner = msg.sender;
@@ -25,6 +30,14 @@ contract KnowledgeTest {
     /// @notice Fetches the ETH balance of the contract
     function getBalance() public view returns (uint256) {
         return address(this).balance;
+    }
+
+    /// @notice Transfers all the balance of the contract to the owner
+    function transferAll() public requiresOwner {
+        // Transfer the entire balance using call. Reentrancy is not a concern here since we are already emptying out
+        // the entire balance in one go.
+        (bool success, ) = owner.call{value: getBalance()}("");
+        require(success, "Transfer failed.");
     }
 
     /// @notice Handles ETH transfers to this contract
