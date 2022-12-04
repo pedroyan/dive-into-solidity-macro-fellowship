@@ -9,8 +9,8 @@ All the normal hardhat tooling is available in this repository, such as `npx har
 
 Please complete each of the following tasks by adding or editing code in the `KnowledgeTest.sol` contract after finishing section 1:
 
-- Add a public state variable of type address called `owner`
-- Declare the `constructor` and initialize the owner variable in the constructor. The `owner` should be initialized with the address of the account that deploys the contract
+- [x] Add a public state variable of type address called `owner`
+- [x] Declare the `constructor` and initialize the owner variable in the constructor. The `owner` should be initialized with the address of the account that deploys the contract
 - Modify the `changeTokens()` function in such a way that it changes the state variable called tokens.
 - Make it so that the contract can receive ETH by sending it directly to the contract address
 - Add a function called `getBalance()` that returns the contract's balance
