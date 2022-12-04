@@ -12,12 +12,22 @@ contract KnowledgeTest {
     /// once set.
     address public immutable owner;
 
+    /// @notice The constructor is called once when the contract is deployed. It sets the owner of the contract
     constructor() {
         owner = msg.sender;
     }
 
-    function changeTokens() public view {
-        string[] memory t = tokens;
-        t[0] = "VET";
+    /// @notice Changes the value of the first token in the tokens array
+    function changeTokens() public {
+        tokens[0] = "VET";
+    }
+
+    /// @notice Fetches the ETH balance of the contract
+    function getBalance() public view returns (uint256) {
+        return address(this).balance;
+    }
+
+    /// @notice Handles ETH transfers to this contract
+    receive() external payable {
     }
 }
