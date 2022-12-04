@@ -33,11 +33,21 @@ contract KnowledgeTest {
     }
 
     /// @notice Transfers all the balance of the contract to the owner
-    function transferAll() public requiresOwner {
+    function transferAll(address payable _destination) external requiresOwner {
         // Transfer the entire balance using call. Reentrancy is not a concern here since we are already emptying out
         // the entire balance in one go.
-        (bool success, ) = owner.call{value: getBalance()}("");
+        (bool success, ) = _destination.call{value: getBalance()}("");
         require(success, "Transfer failed.");
+    }
+
+    /// @notice Adds a player to the players array
+    function start() external {
+        players.push(msg.sender);
+    }
+
+    /// @notice Concatenates string a and b
+    function concatenate(string calldata _a, string calldata _b) public pure returns (string memory) {
+        return string(abi.encodePacked(_a, _b));
     }
 
     /// @notice Handles ETH transfers to this contract
